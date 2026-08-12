@@ -86,6 +86,25 @@ rather not install anything.
 The first build compiles the whole Rust dependency tree and takes roughly 20 minutes;
 later builds are far quicker.
 
+### Changing the icon
+
+`icons/source.png` is the 1024px master. Regenerate every size from it with:
+
+```bash
+npx tauri icon src-tauri/icons/source.png
+```
+
+Then **clean the crate before rebuilding**:
+
+```bash
+cd src-tauri && cargo clean -p blury && cd .. && npm run tauri build
+```
+
+Cargo caches the compiled Windows resource that carries the icon, and replacing the `.ico`
+alone does not invalidate it — an incremental build will happily embed the *previous*
+icon while every file on disk looks correct. CI builds from a clean checkout and is not
+affected.
+
 To run it in development instead, with hot reload:
 
 ```bash
