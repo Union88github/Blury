@@ -1,0 +1,28 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Bubble and its capture overlays",
+  "_comment": [
+    "A webview not matched here has its IPC rejected outright, which fails",
+    "silently from the frontend's side. The capture overlays are labelled",
+    "capture-0, capture-1, ... one per monitor, so they need the glob — without",
+    "it they cannot call overlay_ready, and since the bubble is hidden for the",
+    "duration of a capture, the whole app appears to vanish."
+  ],
+  "windows": ["bubble", "capture-*"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-show",
+    "core:window:allow-hide",
+    "core:window:allow-set-focus",
+    "core:window:allow-close",
+    "core:window:allow-outer-position",
+    "core:window:allow-outer-size",
+    "core:window:allow-scale-factor",
+    "core:window:allow-current-monitor",
+    "core:window:allow-set-always-on-top",
+    "core:webview:allow-create-webview-window",
+    "core:event:default",
+    "store:default"
+  ]
+}

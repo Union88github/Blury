@@ -1,0 +1,73 @@
+name: Release
+
+# Fires only on a pushed version tag, e.g. `git tag v1.0.0 && git push origin v1.0.0`.
+# Nothing runs on ordinary pushes — this workflow exists to cut releases, not to gate
+# commits.
+on:
+  push:
+    tags:
+      - "v*"
+
+# Needed to create the release and upload the installer to it.
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    # Blury is Windows-only: it links against Win32 directly and bundles an NSIS
+    # installer, neither of which cross-compiles from Linux.
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out the tag
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: bubble/package-lock.json
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      # A cold Rust build of this project takes several minutes; the cache keeps
+      # subsequent releases to about a minute.
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: bubble/src-tauri
+
+      - name: Install dependencies
+        working-directory: bubble
+        run: npm ci
+
+      # Fail the release before building a binary nobody should ship.
+      - name: Run tests
+        working-directory: bubble
+        run: npm test
+
+      - name: Read release notes
+        id: notes
+        shell: bash
+        run: |
+          {
+            echo 'body<<RELEASE_NOTES_EOF'
+            cat RELEASE_NOTES.md
+            echo RELEASE_NOTES_EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build the installer and attach it to a release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: bubble
+          tagName: ${{ github.ref_name }}
+          releaseName: Blury ${{ github.ref_name }}
+          releaseBody: ${{ steps.notes.outputs.body }}
+          # Created as a draft on purpose: the release is yours to review and
+          # publish, so a bad tag never goes public on its own.
+          releaseDraft: true
+          prerelease: false
