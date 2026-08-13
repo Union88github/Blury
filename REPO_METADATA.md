@@ -7,20 +7,26 @@ Not applied automatically — paste these into the GitHub UI yourself.
 Settings → General → Description (max 350 chars, but short reads better in search
 results and on your profile).
 
-**Recommended** (89 characters):
+**Recommended** (96 characters) — leads with the size, which is the differentiator:
 
 ```
-Floating always-on-top bubble for Windows with a radial menu, screenshot tool and notes
+A 1.4 MB floating bubble for Windows with a radial menu, screenshot tool and notes. No Electron.
+```
+
+If you want it shorter, this is 83:
+
+```
+A 1.4 MB floating bubble for Windows. Radial menu, screenshots, notes. No Electron.
 ```
 
 Alternatives, if you prefer a different emphasis:
 
 ```
-A draggable desktop bubble for Windows that opens a radial menu of tools
+Floating always-on-top bubble for Windows with a radial menu, screenshot tool and notes
 ```
 
 ```
-Always-on-top Windows bubble: drag it anywhere, click for screenshots and quick notes
+1.4 MB always-on-top bubble for Windows: drag it anywhere, click for screenshots and notes
 ```
 
 ## Topics

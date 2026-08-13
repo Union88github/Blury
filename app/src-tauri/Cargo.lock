@@ -353,23 +353,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "blury"
-version = "1.0.0"
-dependencies = [
- "arboard",
- "image",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-autostart",
- "tauri-plugin-global-shortcut",
- "tauri-plugin-store",
- "windows 0.61.3",
- "xcap",
-]
-
-[[package]]
 name = "brotli"
 version = "8.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2444,6 +2427,23 @@ dependencies = [
  "libc",
  "wasi",
  "windows-sys 0.61.2",
+]
+
+[[package]]
+name = "mote"
+version = "1.0.0"
+dependencies = [
+ "arboard",
+ "image",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-autostart",
+ "tauri-plugin-global-shortcut",
+ "tauri-plugin-store",
+ "windows 0.61.3",
+ "xcap",
 ]
 
 [[package]]

@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   windows:
-    # Blury is Windows-only: it links against Win32 directly and bundles an NSIS
+    # Mote is Windows-only: it links against Win32 directly and bundles an NSIS
     # installer, neither of which cross-compiles from Linux.
     runs-on: windows-latest
 
@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: bubble/package-lock.json
+          cache-dependency-path: app/package-lock.json
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
@@ -37,15 +37,15 @@ jobs:
       - name: Cache Rust build
         uses: swatinem/rust-cache@v2
         with:
-          workspaces: bubble/src-tauri
+          workspaces: app/src-tauri
 
       - name: Install dependencies
-        working-directory: bubble
+        working-directory: app
         run: npm ci
 
       # Fail the release before building a binary nobody should ship.
       - name: Run tests
-        working-directory: bubble
+        working-directory: app
         run: npm test
 
       - name: Read release notes
@@ -63,9 +63,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          projectPath: bubble
+          projectPath: app
           tagName: ${{ github.ref_name }}
-          releaseName: Blury ${{ github.ref_name }}
+          releaseName: Mote ${{ github.ref_name }}
           releaseBody: ${{ steps.notes.outputs.body }}
           # Created as a draft on purpose: the release is yours to review and
           # publish, so a bad tag never goes public on its own.

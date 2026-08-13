@@ -70,7 +70,7 @@ fn overlay_label(index: usize) -> String {
     format!("capture-{index}")
 }
 
-/// Debug-only trace to `%TEMP%/bubble-capture.log`.
+/// Debug-only trace to `%TEMP%/mote-capture.log`.
 ///
 /// `tauri dev` does not pass the app's stderr through to its own output, so
 /// `eprintln!` from here reaches nobody. A capture spans the backend, three
@@ -81,7 +81,7 @@ pub fn trace(msg: &str) {
         return;
     }
     use std::io::Write;
-    let path = std::env::temp_dir().join("bubble-capture.log");
+    let path = std::env::temp_dir().join("mote-capture.log");
     if let Ok(mut f) = std::fs::OpenOptions::new()
         .create(true)
         .append(true)
@@ -423,10 +423,10 @@ fn save_png(app: &AppHandle, image: &RgbaImage) -> Result<String, String> {
         .picture_dir()
         .or_else(|_| app.path().download_dir())
         .map_err(|e| format!("no place to save: {e}"))?
-        .join("Blury");
+        .join("Mote");
     std::fs::create_dir_all(&dir).map_err(|e| format!("could not create {dir:?}: {e}"))?;
 
-    let path = dir.join(format!("blury-{}.png", timestamp()));
+    let path = dir.join(format!("mote-{}.png", timestamp()));
     std::fs::write(&path, encode_png(image)?)
         .map_err(|e| format!("could not write {path:?}: {e}"))?;
 

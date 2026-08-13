@@ -13,7 +13,7 @@ pub fn build(app: &AppHandle) -> tauri::Result<()> {
     let menu = Menu::with_items(app, &[&toggle, &settings, &separator, &quit])?;
 
     let mut builder = TrayIconBuilder::with_id("bubble-tray")
-        .tooltip("Blury")
+        .tooltip("Mote")
         .menu(&menu)
         // Left click is for showing the bubble, not the menu.
         .show_menu_on_left_click(false)

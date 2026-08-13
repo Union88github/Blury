@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Blury",
+  "productName": "Mote",
   "version": "1.0.0",
-  "identifier": "com.blury.app",
+  "identifier": "com.union88github.mote",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "bubble",
-        "title": "Blury",
+        "title": "Mote",
         "width": 600,
         "height": 600,
         "minWidth": 600,
@@ -39,9 +39,9 @@
   "bundle": {
     "active": true,
     "targets": ["nsis"],
-    "publisher": "Blury",
-    "shortDescription": "Floating always-on-top bubble with a radial menu",
-    "longDescription": "A floating always-on-top circle for Windows. Drag it anywhere, it snaps to the nearest screen edge, and clicking it opens a radial menu of tools — a region screenshot and a notes pad.",
+    "publisher": "Mote",
+    "shortDescription": "A 1.4 MB floating bubble with a radial menu",
+    "longDescription": "A floating always-on-top circle for Windows. Drag it anywhere, it snaps to the nearest screen edge, and clicking it opens a radial menu of tools — a region screenshot and a notes pad. The whole installer is 1.4 MB: no Electron, no .NET, no runtime to install.",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

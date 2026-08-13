@@ -80,7 +80,7 @@ export function Menu<T extends MenuEntry>({
         aria-hidden
       />
 
-      <ul className="menu__items" role="menu" aria-label="Blury tools">
+      <ul className="menu__items" role="menu" aria-label="Mote tools">
         {shown.map((item, i) => {
           const offset = arcOffset(arc[i].angleDeg);
           const Icon = item.icon;

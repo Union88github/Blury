@@ -1,4 +1,4 @@
-//! Persisted settings, at `%APPDATA%/Blury/config.json`.
+//! Persisted settings, at `%APPDATA%/Mote/config.json`.
 //!
 //! The path is derived from `config_dir()`, never hardcoded — the store plugin
 //! would otherwise resolve relative paths against the bundle identifier and put
@@ -50,7 +50,7 @@ fn config_dir(app: &AppHandle) -> Result<PathBuf, String> {
         .path()
         .config_dir()
         .map_err(|e| e.to_string())?
-        .join("Blury"))
+        .join("Mote"))
 }
 
 fn config_path(app: &AppHandle) -> Result<PathBuf, String> {

@@ -1,4 +1,4 @@
-Blury is a floating always-on-top circle for Windows. Drag it anywhere, it snaps to the
+Mote is a floating always-on-top circle for Windows. Drag it anywhere, it snaps to the
 nearest screen edge, and clicking it opens a radial menu of tools.
 
 ## What's in it
@@ -8,7 +8,7 @@ nearest screen edge, and clicking it opens a radial menu of tools.
 - **Radial menu** that turns to face inward near a screen edge or corner, so it never
   opens off-screen.
 - **Screenshot** — freezes every monitor, drag a region, and the result is saved to
-  `Pictures\Blury\` and copied to your clipboard.
+  `Pictures\Mote\` and copied to your clipboard.
 - **Notes** — a plain-text pad beside the bubble that autosaves as you type.
 - **Global hotkey** (`Ctrl+Shift+Space` by default) to summon the bubble to your cursor.
 - **Tray icon** with Show/Hide, Settings and Quit.
@@ -29,15 +29,15 @@ Windows; if it is missing, the installer fetches it.
 
 ## Known limitations
 
-- **A screenshot selection cannot span two monitors.** Blury puts one overlay on each
+- **A screenshot selection cannot span two monitors.** Mote puts one overlay on each
   screen so that mixed-DPI setups crop correctly, and that is the trade-off.
 - **Mixed-DPI multi-monitor capture is untested on real hardware.** The code works in each
   monitor's own physical pixels, but it has only been exercised on a single display.
 - **The `prefers-reduced-motion` path is implemented but untested.**
 - **Notes hold a single buffer.** There are no multiple notes or tabs.
-- Blury is Windows-only. It calls Win32 directly and will not run on macOS or Linux.
+- Mote is Windows-only. It calls Win32 directly and will not run on macOS or Linux.
 
 ## Uninstalling
 
-Add or Remove Programs → Blury. Settings and notes live in `%APPDATA%\Blury\` and are left
+Add or Remove Programs → Mote. Settings and notes live in `%APPDATA%\Mote\` and are left
 behind; delete that folder if you want them gone too.

@@ -1,8 +1,11 @@
-# Blury
+# Mote
 
-A floating always-on-top circle for Windows. Drag it anywhere, it snaps to the nearest
-screen edge, and clicking it opens a radial menu of tools — a region screenshot and a
-notes pad.
+A floating always-on-top circle for Windows, in a **1.4 MB installer**. No Electron, no
+.NET, no Visual C++ redistributable — one small native binary that idles at about 25 MB
+of RAM.
+
+Drag it anywhere and it snaps to the nearest screen edge. Click it and a radial menu fans
+out with a region screenshot tool and a notes pad.
 
 ![demo](docs/demo.gif)
 
@@ -10,7 +13,7 @@ notes pad.
 
 **[Download the latest installer from Releases](../../releases/latest)**
 
-Grab the `.exe` installer, run it, and Blury starts in your system tray.
+Grab the `.exe` installer, run it, and Mote starts in your system tray.
 
 ### First run: Windows will warn you
 
@@ -29,8 +32,8 @@ same binary.
 - **Radial menu** — click the bubble to fan the tools out around it. The arc turns to face
   inward when the bubble is near an edge or in a corner, so it never opens off-screen.
 - **Screenshot** — freezes every monitor, then drag a region. The result is saved to
-  `Pictures\Blury\` and copied to your clipboard. Works per-monitor, so mixed-DPI setups
-  crop correctly.
+  `Pictures\Mote\` and copied to your clipboard. Each monitor is captured in its own
+  physical pixels, so mixed-DPI setups crop correctly.
 - **Notes** — a plain-text pad anchored beside the bubble. Autosaves as you type and
   persists across restarts.
 - **Global hotkey** — summon the bubble to your cursor from anywhere.
@@ -53,9 +56,18 @@ same binary.
 
 To change the summon hotkey, right-click the tray icon → **Settings**. Type a new
 combination (for example `Alt+Space`) and press **Save**. If another application already
-owns that combination, Blury tells you and keeps the previous one.
+owns that combination, Mote tells you and keeps the previous one.
 
-Settings live in `%APPDATA%\Blury\config.json`, notes in `%APPDATA%\Blury\notes.json`.
+Settings live in `%APPDATA%\Mote\config.json`, notes in `%APPDATA%\Mote\notes.json`.
+
+## Limitations
+
+- A screenshot selection cannot span two monitors. Mote puts one overlay on each screen so
+  that mixed-DPI setups crop correctly, and that is the trade-off.
+- Mixed-DPI multi-monitor capture is written to work in each monitor's own physical pixels
+  but has only been exercised on a single display.
+- Notes hold a single buffer — no multiple notes or tabs.
+- Windows only. It calls Win32 directly and will not run on macOS or Linux.
 
 ## Requirements
 
@@ -64,46 +76,25 @@ Settings live in `%APPDATA%\Blury\config.json`, notes in `%APPDATA%\Blury\notes.
   installer fetches it. To install it manually:
   `winget install --id Microsoft.EdgeWebView2Runtime -e`
 
-There is no .NET, Electron, or Visual C++ redistributable to install.
-
 ## Build from source
 
 You need [Node.js](https://nodejs.org/) 18+, [Rust](https://rustup.rs/) (stable, MSVC
 toolchain), and the Visual Studio C++ build tools that `rustup` prompts for on Windows.
 
 ```bash
-git clone https://github.com/Union88github/Blury.git
-cd Blury/bubble
+git clone https://github.com/Union88github/Mote.git
+cd Mote/app
 npm install
 npm run tauri build
 ```
 
 The installer lands at
-`bubble/src-tauri/target/release/bundle/nsis/Blury_1.0.0_x64-setup.exe` (~1.4 MB). A
-standalone `blury.exe` is also produced in `bubble/src-tauri/target/release/`, if you would
-rather not install anything.
+`app/src-tauri/target/release/bundle/nsis/Mote_1.0.0_x64-setup.exe` (~1.4 MB). A standalone
+`mote.exe` is also produced in `app/src-tauri/target/release/`, if you would rather not
+install anything.
 
 The first build compiles the whole Rust dependency tree and takes roughly 20 minutes;
 later builds are far quicker.
-
-### Changing the icon
-
-`icons/source.png` is the 1024px master. Regenerate every size from it with:
-
-```bash
-npx tauri icon src-tauri/icons/source.png
-```
-
-Then **clean the crate before rebuilding**:
-
-```bash
-cd src-tauri && cargo clean -p blury && cd .. && npm run tauri build
-```
-
-Cargo caches the compiled Windows resource that carries the icon, and replacing the `.ico`
-alone does not invalidate it — an incremental build will happily embed the *previous*
-icon while every file on disk looks correct. CI builds from a clean checkout and is not
-affected.
 
 To run it in development instead, with hot reload:
 
@@ -116,6 +107,9 @@ To run the test suite:
 ```bash
 npm test
 ```
+
+Maintainer notes — regenerating the icon, cutting a release — are in
+[docs/MAINTAINING.md](docs/MAINTAINING.md).
 
 ## License
 
