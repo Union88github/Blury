@@ -25,6 +25,7 @@ app/src-tauri/gen/schemas/
 # Internal development notes, not part of the published project
 CLAUDE.md
 bubble-kickoff-prompt.md
+docs/LAUNCH.md
 
 # Editor directories and files
 .vscode/*
