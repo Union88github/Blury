@@ -1,6 +1,6 @@
 [package]
 name = "mote"
-version = "1.1.0"
+version = "1.1.1"
 description = "A floating bubble for Windows with a radial menu, screenshot tool and notes"
 authors = ["Union88github"]
 license = "MIT"
@@ -30,6 +30,8 @@ image = { version = "0.25.10", default-features = false, features = ["png"] }
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-global-shortcut = "2"
 tauri-plugin-autostart = "2"
+tauri-plugin-updater = "2"
+tauri-plugin-process = "2"
 
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.61", features = [

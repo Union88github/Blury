@@ -6,11 +6,11 @@
 //!   * the monitor work area (taskbar excluded) in physical pixels.
 
 use windows::Win32::Foundation::{HWND, POINT, RECT};
-use windows::Win32::UI::WindowsAndMessaging::GetWindowRect;
 use windows::Win32::Graphics::Gdi::{
     GetMonitorInfoW, MonitorFromPoint, MONITORINFO, MONITOR_DEFAULTTONEAREST,
 };
 use windows::Win32::UI::HiDpi::{GetDpiForMonitor, GetDpiForWindow, MDT_EFFECTIVE_DPI};
+use windows::Win32::UI::WindowsAndMessaging::GetWindowRect;
 use windows::Win32::UI::WindowsAndMessaging::{
     GetCursorPos, SetWindowPos, SWP_NOACTIVATE, SWP_NOZORDER,
 };
@@ -136,7 +136,8 @@ pub fn scale_factor_at(x: f64, y: f64) -> f64 {
         );
         let mut dpi_x = 0u32;
         let mut dpi_y = 0u32;
-        if GetDpiForMonitor(monitor, MDT_EFFECTIVE_DPI, &mut dpi_x, &mut dpi_y).is_err() || dpi_x == 0
+        if GetDpiForMonitor(monitor, MDT_EFFECTIVE_DPI, &mut dpi_x, &mut dpi_y).is_err()
+            || dpi_x == 0
         {
             return 1.0;
         }

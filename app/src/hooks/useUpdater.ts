@@ -1,0 +1,7 @@
+import { useSyncExternalStore } from "react";
+
+import { getSnapshot, subscribe, type UpdaterSnapshot } from "../lib/updater";
+
+export function useUpdater(): UpdaterSnapshot {
+  return useSyncExternalStore(subscribe, getSnapshot);
+}

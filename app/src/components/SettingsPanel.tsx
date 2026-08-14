@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 import { getSettings, saveSettings } from "../lib/ipc";
+import { runUpdateCheck } from "../lib/updater";
+import { useUpdater } from "../hooks/useUpdater";
 
 type Status = { kind: "idle" | "saving" | "saved" | "error"; message?: string };
 
@@ -23,6 +25,10 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
   /** What is actually persisted, so we can tell whether anything changed. */
   const saved = useRef({ hotkey: "", autostart: false });
   const field = useRef<HTMLInputElement | null>(null);
+
+  const updater = useUpdater();
+  /** "Up to date" only means anything right after a check the user asked for. */
+  const checkedManually = useRef(false);
 
   useEffect(() => {
     let alive = true;
@@ -118,6 +124,31 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
           />
           <span>Start with Windows</span>
         </label>
+
+        <div className="settings__field">
+          <span className="settings__label">Version {updater.version}</span>
+          {/* No install button here either: once a check (this one or the
+              silent startup one) finds an update, downloading it, announcing
+              it on the bubble, and installing it all happen automatically. */}
+          <button
+            type="button"
+            className="settings__save"
+            disabled={updater.status !== "idle" && updater.status !== "error"}
+            onClick={() => {
+              checkedManually.current = true;
+              void runUpdateCheck({ silent: false });
+            }}
+          >
+            Check for updates
+          </button>
+          <p className="settings__status" data-kind={updater.status === "error" ? "error" : "idle"}>
+            {updater.status === "checking" && "Checking…"}
+            {updater.status === "downloading" && `Downloading v${updater.toVersion}…`}
+            {updater.status === "restarting" && "Restarting to finish installing…"}
+            {updater.status === "error" && updater.error}
+            {updater.status === "idle" && checkedManually.current && "You're up to date"}
+          </p>
+        </div>
       </div>
 
       <footer className="settings__foot">

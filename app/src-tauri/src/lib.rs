@@ -14,7 +14,8 @@ const SUMMON_EVENT: &str = "bubble://summon";
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let mut builder = tauri::Builder::default().plugin(tauri_plugin_store::Builder::new().build());
+    let mut builder =
+        tauri::Builder::default().plugin(tauri_plugin_store::Builder::new().build());
 
     #[cfg(desktop)]
     {
@@ -33,7 +34,9 @@ pub fn run() {
             .plugin(tauri_plugin_autostart::init(
                 tauri_plugin_autostart::MacosLauncher::LaunchAgent,
                 None,
-            ));
+            ))
+            .plugin(tauri_plugin_updater::Builder::new().build())
+            .plugin(tauri_plugin_process::init());
     }
 
     builder
@@ -53,6 +56,8 @@ pub fn run() {
             settings::save_position,
             settings::get_notes,
             settings::save_notes,
+            settings::mark_update_pending,
+            settings::take_pending_update,
             capture::begin_capture,
             capture::overlay_ready,
             capture::overlay_show,
@@ -126,7 +131,11 @@ fn sync_autostart(app: &tauri::AppHandle) {
     if want == is {
         return;
     }
-    let result = if want { manager.enable() } else { manager.disable() };
+    let result = if want {
+        manager.enable()
+    } else {
+        manager.disable()
+    };
     if let Err(e) = result {
         eprintln!("bubble: could not sync autostart to {want}: {e}");
     }

@@ -20,6 +20,14 @@ const KEY: &str = "settings";
 const NOTES_FILE: &str = "notes.json";
 const NOTES_KEY: &str = "text";
 
+/// Written just before an update installs, read once on the next boot to show
+/// the "Updated to x.y.z" card, then deleted — so it never fires a second time
+/// on an ordinary launch. Its own file for the same reason notes get one: this
+/// is written from a completely different moment in the app's life than the
+/// rest of `Settings`, right before the process is about to be replaced.
+const PENDING_UPDATE_FILE: &str = "pending-update.json";
+const PENDING_UPDATE_KEY: &str = "pending";
+
 pub const DEFAULT_HOTKEY: &str = "Ctrl+Shift+Space";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -62,7 +70,9 @@ fn config_path(app: &AppHandle) -> Result<PathBuf, String> {
 pub fn load(app: &AppHandle) -> Settings {
     let read = || -> Result<Settings, String> {
         let store = app.store(config_path(app)?).map_err(|e| e.to_string())?;
-        let value = store.get(KEY).ok_or_else(|| "no settings yet".to_string())?;
+        let value = store
+            .get(KEY)
+            .ok_or_else(|| "no settings yet".to_string())?;
         serde_json::from_value(value).map_err(|e| e.to_string())
     };
     read().unwrap_or_default()
@@ -175,7 +185,9 @@ pub fn get_notes(app: AppHandle) -> String {
         let store = app
             .store(config_dir(&app)?.join(NOTES_FILE))
             .map_err(|e| e.to_string())?;
-        let value = store.get(NOTES_KEY).ok_or_else(|| "no notes yet".to_string())?;
+        let value = store
+            .get(NOTES_KEY)
+            .ok_or_else(|| "no notes yet".to_string())?;
         serde_json::from_value(value).map_err(|e| e.to_string())
     };
     read().unwrap_or_default()
@@ -190,4 +202,42 @@ pub fn save_notes(app: AppHandle, text: String) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
     store.set(NOTES_KEY, serde_json::Value::String(text));
     store.save().map_err(|e| e.to_string())
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PendingUpdate {
+    pub from_version: String,
+    pub to_version: String,
+}
+
+/// Called right before `install()`, so the flag is on disk even if the process
+/// is replaced a moment later and never gets to run any more JS.
+#[tauri::command]
+pub fn mark_update_pending(app: AppHandle, to_version: String) -> Result<(), String> {
+    let pending = PendingUpdate {
+        from_version: app.package_info().version.to_string(),
+        to_version,
+    };
+    let store = app
+        .store(config_dir(&app)?.join(PENDING_UPDATE_FILE))
+        .map_err(|e| e.to_string())?;
+    store.set(
+        PENDING_UPDATE_KEY,
+        serde_json::to_value(&pending).map_err(|e| e.to_string())?,
+    );
+    store.save().map_err(|e| e.to_string())
+}
+
+/// Read-and-clear: called once at startup. Returns `None` on an ordinary
+/// launch, which is the common case, so a missing file is not an error.
+#[tauri::command]
+pub fn take_pending_update(app: AppHandle) -> Option<PendingUpdate> {
+    let store = app
+        .store(config_dir(&app).ok()?.join(PENDING_UPDATE_FILE))
+        .ok()?;
+    let value = store.get(PENDING_UPDATE_KEY)?;
+    store.delete(PENDING_UPDATE_KEY);
+    let _ = store.save();
+    serde_json::from_value(value).ok()
 }

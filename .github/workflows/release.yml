@@ -62,6 +62,8 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           projectPath: app
           tagName: ${{ github.ref_name }}
@@ -71,3 +73,6 @@ jobs:
           # publish, so a bad tag never goes public on its own.
           releaseDraft: true
           prerelease: false
+          # Signs the NSIS installer and publishes latest.json alongside it —
+          # that's the file the updater endpoint in tauri.conf.json fetches.
+          includeUpdaterJson: true

@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Mote",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "identifier": "com.union88github.mote",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -36,9 +36,18 @@
       "csp": null
     }
   },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/Union88github/Mote/releases/latest/download/latest.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDdEQzI4RjdCQTNBOEM0NUQKUldSZHhLaWplNC9DZlRrR04rMjl5T251QmVNVW8rRHFmRWFVcmp3UXFqbHJteUdjclFEWkNkMUgK"
+    }
+  },
   "bundle": {
     "active": true,
     "targets": ["nsis"],
+    "createUpdaterArtifacts": true,
     "publisher": "Mote",
     "shortDescription": "A floating bubble with a radial menu",
     "longDescription": "A small circle that floats on top of your other windows. Drag it where you want and it snaps to the nearest screen edge. Click it and a menu fans out around it with a screenshot tool and a notepad.",

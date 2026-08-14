@@ -127,6 +127,19 @@ export const saveSettings = (hotkey: string, autostart: boolean) =>
 export const savePosition = (x: number, y: number) =>
   invoke<void>("save_position", { x, y });
 
+export type PendingUpdate = { fromVersion: string; toVersion: string };
+
+/**
+ * Written right before `install()` — the process may be replaced moments
+ * later, so this has to be on disk before that call, not after it.
+ */
+export const markUpdatePending = (toVersion: string) =>
+  invoke<void>("mark_update_pending", { toVersion });
+
+/** Read-and-clear: `null` on an ordinary launch, which is the common case. */
+export const takePendingUpdate = () =>
+  invoke<PendingUpdate | null>("take_pending_update");
+
 /**
  * Label prefix for capture overlay windows. Mirrors `overlay_label` in
  * src-tauri/src/capture.rs — the frontend routes on it to decide which UI to

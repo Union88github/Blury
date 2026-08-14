@@ -7,6 +7,12 @@ import { useReducedMotion } from "../hooks/useReducedMotion";
 
 type Visual = "idle" | "hover" | "press" | "drag";
 
+/** Mirrors `.bubble__progress` in styles.css — the ring sits at inset:-8px
+ * around the 64px disc, so its radius is (64 + 16) / 2 = 40, inset by half
+ * the stroke width. */
+const RING_RADIUS = 39;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+
 type Props = {
   driver: BubbleDriver;
   onActivate: () => void;
@@ -14,9 +20,20 @@ type Props = {
   open?: boolean;
   /** Threshold crossed. The arc can't follow a moving bubble, so it closes. */
   onDragStart?: () => void;
+  /** An update is downloading (or has finished and is about to install). */
+  updating?: boolean;
+  /** 0..1. Only read while `updating` is true. */
+  updateProgress?: number;
 };
 
-export function Bubble({ driver, onActivate, open = false, onDragStart }: Props) {
+export function Bubble({
+  driver,
+  onActivate,
+  open = false,
+  onDragStart,
+  updating = false,
+  updateProgress = 0,
+}: Props) {
   const [visual, setVisual] = useState<Visual>("idle");
   const reduceMotion = useReducedMotion();
 
@@ -107,6 +124,19 @@ export function Bubble({ driver, onActivate, open = false, onDragStart }: Props)
       <span className="bubble__body" aria-hidden>
         <span className="bubble__specular" />
       </span>
+      {updating && (
+        <svg className="bubble__progress" viewBox="0 0 80 80" aria-hidden>
+          <circle className="bubble__progress-track" cx="40" cy="40" r={RING_RADIUS} />
+          <circle
+            className="bubble__progress-fill"
+            cx="40"
+            cy="40"
+            r={RING_RADIUS}
+            strokeDasharray={RING_CIRCUMFERENCE}
+            strokeDashoffset={RING_CIRCUMFERENCE * (1 - updateProgress)}
+          />
+        </svg>
+      )}
     </button>
   );
 }

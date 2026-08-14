@@ -23,6 +23,10 @@
     "core:window:allow-set-always-on-top",
     "core:webview:allow-create-webview-window",
     "core:event:default",
-    "store:default"
+    "store:default",
+    "updater:default",
+    "updater:allow-check",
+    "updater:allow-download-and-install",
+    "process:allow-restart"
   ]
 }

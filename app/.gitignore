@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Updater signing keypair — the public half is copied into tauri.conf.json,
+# neither file needs to be tracked, and the private half must never be.
+src-tauri/*.key*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

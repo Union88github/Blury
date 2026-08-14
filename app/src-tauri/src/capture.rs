@@ -118,7 +118,11 @@ pub fn capture_log(message: String) {
 pub async fn begin_capture(app: AppHandle) -> Result<Vec<ShotInfo>, String> {
     // Re-entrancy: a second trigger while one is running would strand the first
     // set of overlays with no way to dismiss them.
-    if FRAMES.lock().map_err(|_| "capture lock poisoned")?.is_some() {
+    if FRAMES
+        .lock()
+        .map_err(|_| "capture lock poisoned")?
+        .is_some()
+    {
         return Err("a capture is already running".into());
     }
 
@@ -249,7 +253,9 @@ fn grab_all() -> Result<Vec<Frame>, String> {
     for m in monitors {
         let x = m.x().map_err(|e| e.to_string())?;
         let y = m.y().map_err(|e| e.to_string())?;
-        let image = m.capture_image().map_err(|e| format!("capture failed: {e}"))?;
+        let image = m
+            .capture_image()
+            .map_err(|e| format!("capture failed: {e}"))?;
         // Ask Windows rather than xcap: this is the same value the frontend's
         // layout is scaled by, and mixing two sources of truth for DPI is how
         // mixed-scale setups end up off by 25%.
@@ -272,8 +278,12 @@ fn grab_all() -> Result<Vec<Frame>, String> {
 #[tauri::command]
 pub fn overlay_ready(app: AppHandle, index: usize) -> Result<ShotInfo, String> {
     let guard = FRAMES.lock().map_err(|_| "capture lock poisoned")?;
-    let frames = guard.as_ref().ok_or_else(|| "no capture running".to_string())?;
-    let frame = frames.get(index).ok_or_else(|| "no such monitor".to_string())?;
+    let frames = guard
+        .as_ref()
+        .ok_or_else(|| "no capture running".to_string())?;
+    let frame = frames
+        .get(index)
+        .ok_or_else(|| "no such monitor".to_string())?;
 
     let info = ShotInfo {
         index,
@@ -328,8 +338,12 @@ pub fn overlay_show(app: AppHandle, index: usize) -> Result<(), String> {
 #[tauri::command]
 pub fn capture_frame(index: usize) -> Result<tauri::ipc::Response, String> {
     let guard = FRAMES.lock().map_err(|_| "capture lock poisoned")?;
-    let frames = guard.as_ref().ok_or_else(|| "no capture running".to_string())?;
-    let frame = frames.get(index).ok_or_else(|| "no such monitor".to_string())?;
+    let frames = guard
+        .as_ref()
+        .ok_or_else(|| "no capture running".to_string())?;
+    let frame = frames
+        .get(index)
+        .ok_or_else(|| "no such monitor".to_string())?;
 
     let bytes = frame.image.as_raw().clone();
     trace(&format!("capture_frame {index}: {} bytes", bytes.len()));
@@ -362,8 +376,12 @@ pub async fn finish_capture(
 ) -> Result<String, String> {
     let cropped = {
         let guard = FRAMES.lock().map_err(|_| "capture lock poisoned")?;
-        let frames = guard.as_ref().ok_or_else(|| "no capture running".to_string())?;
-        let frame = frames.get(index).ok_or_else(|| "no such monitor".to_string())?;
+        let frames = guard
+            .as_ref()
+            .ok_or_else(|| "no capture running".to_string())?;
+        let frame = frames
+            .get(index)
+            .ok_or_else(|| "no such monitor".to_string())?;
 
         // Trust nothing from the frontend: a crop outside the image would panic
         // inside `image`.
@@ -515,7 +533,10 @@ mod tests {
 
         // Crop the same way `finish_capture` does.
         let frame = &frames[0];
-        let (w, h) = (320u32.min(frame.image.width()), 180u32.min(frame.image.height()));
+        let (w, h) = (
+            320u32.min(frame.image.width()),
+            180u32.min(frame.image.height()),
+        );
         let crop = image::imageops::crop_imm(&frame.image, 0, 0, w, h).to_image();
         assert_eq!((crop.width(), crop.height()), (w, h), "crop lost its size");
 
