@@ -108,9 +108,6 @@ To run the test suite:
 npm test
 ```
 
-Maintainer notes — regenerating the icon, cutting a release — are in
-[docs/MAINTAINING.md](docs/MAINTAINING.md).
-
 ## License
 
 MIT — see [LICENSE](LICENSE).

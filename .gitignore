@@ -22,10 +22,20 @@ app/src-tauri/gen/schemas/
 .env.*
 .npmrc
 
-# Internal development notes, not part of the published project
+# Internal development notes and workspace scaffolding. None of this is part of
+# the published project; it stays on disk and out of the repo.
+#
+# Deliberately NOT here, despite being development files: .github/workflows,
+# RELEASE_NOTES.md (the release workflow reads it), and everything under app/
+# that builds the binary. Removing any of those breaks the build or the release.
 CLAUDE.md
 bubble-kickoff-prompt.md
 docs/LAUNCH.md
+docs/MAINTAINING.md
+REPO_METADATA.md
+app/IDEAS.md
+.vscode/
+app/.vscode/
 
 # Editor directories and files
 .vscode/*
