@@ -1,52 +1,61 @@
-Mote is a floating always-on-top circle for Windows. Drag it anywhere, it snaps to the
-nearest screen edge, and clicking it opens a radial menu of tools.
+Mote is a small circle that floats on top of your other windows. Drag it where you want and
+it snaps to the nearest screen edge. Click it and a menu fans out around it with a
+screenshot tool and a notepad.
 
-The whole installer is **1.4 MB**. No Electron, no .NET, no Visual C++ redistributable —
-one native binary that idles at about 25 MB of RAM.
+It's a native Windows binary built with Tauri rather than a bundled browser, so the
+download is small and there's no runtime to install alongside it.
 
-> **This project was called Blury in 1.0.0.** Same application, renamed. If you installed
-> 1.0.0, uninstall "Blury" from Add or Remove Programs first — the rename changes the
-> install identity, so otherwise the two sit side by side. Settings and notes moved from
+> **This was called Blury in 1.0.0.** Same application, renamed. If you installed 1.0.0,
+> uninstall "Blury" from Add or Remove Programs first, because the rename changes the
+> install identity and otherwise the two sit side by side. Settings and notes moved from
 > `%APPDATA%\Blury\` to `%APPDATA%\Mote\`; copy that folder across if you want to keep
-> them. No functional changes since 1.0.0.
+> them. Nothing else changed.
 
 ## What's in it
 
-- **Draggable bubble** with momentum. Throw it and it springs to the nearest edge, and it
-  remembers where it was across restarts.
-- **Radial menu** that turns to face inward near a screen edge or corner, so it never
-  opens off-screen.
-- **Screenshot** — freezes every monitor, drag a region, and the result is saved to
-  `Pictures\Mote\` and copied to your clipboard.
-- **Notes** — a plain-text pad beside the bubble that autosaves as you type.
-- **Global hotkey** (`Ctrl+Shift+Space` by default) to summon the bubble to your cursor.
-- **Tray icon** with Show/Hide, Settings and Quit.
-- **Start with Windows**, optional and off by default.
+Drag the bubble and it throws with momentum, then springs to the nearest edge and remembers
+where you left it.
+
+Click it and the tools fan out in an arc that turns to face inward near an edge or corner,
+so it never opens off the screen.
+
+The screenshot tool freezes every monitor, you drag a box, and the result goes to your
+clipboard and to a PNG in `Pictures\Mote\`.
+
+The notepad opens beside the bubble and saves as you type.
+
+There's a global hotkey (`Ctrl+Shift+Space` by default) to summon the bubble to your cursor,
+a tray icon for hiding and quitting, and an optional start-with-Windows setting that's off
+by default.
 
 ## Installing
 
-Download the `.exe` installer below and run it. It installs for the current user only, so
-there is no UAC prompt.
+Download the installer below and run it. It installs for the current user, so there's no
+UAC prompt.
 
-**Windows will warn you on first run.** The installer is unsigned, so SmartScreen shows
-"Windows protected your PC". Click **More info**, then **Run anyway**. A code-signing
-certificate costs a few hundred dollars a year, which is not something a free project
-carries. The source is public if you would rather build it yourself.
+Windows will warn you the first time. The installer isn't signed, so SmartScreen shows
+"Windows protected your PC". Click More info, then Run anyway. A code signing certificate
+costs a few hundred dollars a year, which is not something a free project carries. The
+source is public if you'd rather build it yourself.
 
-Requires Windows 10 (1803+) or Windows 11, 64-bit. The WebView2 runtime ships with current
-Windows; if it is missing, the installer fetches it.
+Needs Windows 10 version 1803 or later, or Windows 11, 64-bit. The WebView2 runtime ships
+with current Windows, and the installer fetches it if it's missing.
 
 ## Known limitations
 
-- **A screenshot selection cannot span two monitors.** Mote puts one overlay on each
-  screen so that mixed-DPI setups crop correctly, and that is the trade-off.
-- **Mixed-DPI multi-monitor capture is untested on real hardware.** The code works in each
-  monitor's own physical pixels, but it has only been exercised on a single display.
-- **The `prefers-reduced-motion` path is implemented but untested.**
-- **Notes hold a single buffer.** There are no multiple notes or tabs.
-- Mote is Windows-only. It calls Win32 directly and will not run on macOS or Linux.
+A screenshot selection can't span two monitors. Mote puts a separate overlay on each screen
+so that different scaling factors crop correctly, and that's the cost of doing it that way.
+
+The multi-monitor path is written to work in each screen's own pixels but has only ever run
+on a single display. Treat it as untested.
+
+The `prefers-reduced-motion` path is implemented but also untested.
+
+Notes are one buffer. No tabs, no multiple notes.
+
+Windows only. It calls Win32 directly and won't run on macOS or Linux.
 
 ## Uninstalling
 
-Add or Remove Programs → Mote. Settings and notes live in `%APPDATA%\Mote\` and are left
-behind; delete that folder if you want them gone too.
+Add or Remove Programs, then Mote. Settings and notes stay in `%APPDATA%\Mote\`; delete
+that folder too if you want them gone.

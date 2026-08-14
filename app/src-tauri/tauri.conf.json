@@ -40,8 +40,8 @@
     "active": true,
     "targets": ["nsis"],
     "publisher": "Mote",
-    "shortDescription": "A 1.4 MB floating bubble with a radial menu",
-    "longDescription": "A floating always-on-top circle for Windows. Drag it anywhere, it snaps to the nearest screen edge, and clicking it opens a radial menu of tools — a region screenshot and a notes pad. The whole installer is 1.4 MB: no Electron, no .NET, no runtime to install.",
+    "shortDescription": "A floating bubble with a radial menu",
+    "longDescription": "A small circle that floats on top of your other windows. Drag it where you want and it snaps to the nearest screen edge. Click it and a menu fans out around it with a screenshot tool and a notepad.",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
