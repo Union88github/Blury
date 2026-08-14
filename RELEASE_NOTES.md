@@ -1,6 +1,15 @@
 Mote is a floating always-on-top circle for Windows. Drag it anywhere, it snaps to the
 nearest screen edge, and clicking it opens a radial menu of tools.
 
+The whole installer is **1.4 MB**. No Electron, no .NET, no Visual C++ redistributable —
+one native binary that idles at about 25 MB of RAM.
+
+> **This project was called Blury in 1.0.0.** Same application, renamed. If you installed
+> 1.0.0, uninstall "Blury" from Add or Remove Programs first — the rename changes the
+> install identity, so otherwise the two sit side by side. Settings and notes moved from
+> `%APPDATA%\Blury\` to `%APPDATA%\Mote\`; copy that folder across if you want to keep
+> them. No functional changes since 1.0.0.
+
 ## What's in it
 
 - **Draggable bubble** with momentum. Throw it and it springs to the nearest edge, and it

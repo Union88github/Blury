@@ -89,7 +89,7 @@ npm run tauri build
 ```
 
 The installer lands at
-`app/src-tauri/target/release/bundle/nsis/Mote_1.0.0_x64-setup.exe` (~1.4 MB). A standalone
+`app/src-tauri/target/release/bundle/nsis/Mote_1.1.0_x64-setup.exe` (~1.4 MB). A standalone
 `mote.exe` is also produced in `app/src-tauri/target/release/`, if you would rather not
 install anything.
 
